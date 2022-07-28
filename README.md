@@ -39,7 +39,7 @@ module.exports = {
             sender:'xxx@xxx.xxx', // 发件邮箱
             password:'xxxxxx', // 邮箱密码
             name:'掘金签到小助手 ：）', // 邮件标题
-            receiv:'xxxx', // 收件邮箱
+            receiv:'xxx@xxx.xxx', // 收件邮箱
             title:'签到详情', // 邮件标题
             body:'' // 发件内容
         }
