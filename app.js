@@ -10,24 +10,16 @@ const {
 // 零点随机时间
 const randomSec = Math.floor(Math.random() * 60);
 const randomMin = Math.floor(Math.random() * 60);
-const randomTime=`${randomSec} ${randomMin} 0 * * *`;
+const randomTime = `${randomSec} ${randomMin} 0 * * *`;
 
 // 签到抽奖流程
 async function startTask(options) {
-    // 数据查询
-    // 签到数据
-    const {
-        data: count
-    } = await axios(options.getCurCount);
-    // 矿石数据
-    const {
-        data: point
-    } = await axios(options.getCurPoint);
+
     // 签到查询
     const {
         data: checkState
     } = await axios(options.getCheckStatus);
-    if (checkState.data) {
+    if (!checkState.data) {
         setTimeout(async () => {
             // 签到
             const {
@@ -40,8 +32,18 @@ async function startTask(options) {
                 } = await axios(options.getlotteryStatus);
                 if (getlotteryStatus.data.free_count === 1) {
                     // 抽奖
-                    const {data:draw} = await axios(options.draw);
+                    const {
+                        data: draw
+                    } = await axios(options.draw);
                     if (draw.err_msg === 'success') {
+                        // 签到数据
+                        const {
+                            data: count
+                        } = await axios(options.getCurCount);
+                        // 矿石数据
+                        const {
+                            data: point
+                        } = await axios(options.getCurPoint);
                         const lottery_name = draw.data.lottery_name;
                         const total_lucky_value = draw.data.total_lucky_value;
                         const draw_lucky_value = draw.data.total_lucky_value;
@@ -57,8 +59,8 @@ async function startTask(options) {
                             lottery_name,
                             total_lucky_value,
                             draw_lucky_value,
-                            count:`连续签到${count.data.cont_count}天,累计签到${count.data.sum_count}天`,
-                            point:`当前累计矿石${point.data}块`,
+                            count: `连续签到${count.data.cont_count}天,累计签到${count.data.sum_count}天`,
+                            point: `当前累计矿石${point.data}块`,
                             time: nowTime,
                         }
                         logging(log)
@@ -103,6 +105,7 @@ const transporter = nodemailer.createTransport({
         pass: email.config.password
     }
 })
+// 
 
 function sendEmail(message) {
     const mailOptions = {
